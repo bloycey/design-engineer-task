@@ -6,15 +6,30 @@ import DetailsToggle from "./DetailsToggle";
 import FailedStatusIcon from "./FailedStatusIcon";
 import FailureCard from "./FailureCard";
 import Timeline from "./Timeline";
-import type { BuildStatus, BuildStep } from "@/types/build";
+import type { BuildStatus, BuildStep, StepStatus } from "@/types/build";
 import { cn } from "@/lib/utils";
 import {
   getStatusColors,
   computeBuildStats,
   collectFailures,
   buildShortFailureSummary,
+  getOtherJobsByStep,
   type BuildFailure,
 } from "@/lib/buildStatus";
+
+const OTHER_JOB_STATUS_STYLE: Record<
+  StepStatus,
+  { Icon: LucideIcon; iconClass: string; phrase: string }
+> = {
+  complete: { Icon: Check, iconClass: "text-green-600", phrase: "passed" },
+  failed: { Icon: X, iconClass: "text-red-600", phrase: "failed" },
+  "in-progress": {
+    Icon: Loader2,
+    iconClass: "animate-spin text-amber-500",
+    phrase: "running",
+  },
+  pending: { Icon: Clock, iconClass: "text-zinc-400", phrase: "didn't run" },
+};
 
 const BADGE_STYLE = {
   running: {
@@ -106,6 +121,7 @@ const BuildHeader: React.FC<BuildHeaderProps> = ({
   const buildNumberLabel = `#${buildNumber.replace(/^#/, "")}`;
   const buildStats = computeBuildStats(buildSteps);
   const failures = collectFailures(buildSteps);
+  const otherJobGroups = getOtherJobsByStep(buildSteps);
   const shortFailureLine = buildShortFailureSummary(failures);
 
   const statusPrefix =
@@ -242,16 +258,71 @@ const BuildHeader: React.FC<BuildHeaderProps> = ({
               <div className="min-h-0 overflow-hidden">
                 <div className="flex flex-col gap-4 pt-3">
                   {failures.length > 0 && (
-                    <ul className="flex flex-col gap-3">
-                      {failures.map((failure) => (
-                        <li key={failure.id}>
-                          <FailureCard
-                            failure={failure}
-                            onRetryJob={onRetryJob}
-                          />
-                        </li>
-                      ))}
-                    </ul>
+                    <section>
+                      <h4 className="mb-2 text-sm font-semibold text-zinc-900">
+                        Failures
+                      </h4>
+                      <ul className="flex flex-col gap-3">
+                        {failures.map((failure) => (
+                          <li key={failure.id}>
+                            <FailureCard
+                              failure={failure}
+                              onRetryJob={onRetryJob}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  )}
+
+                  {otherJobGroups.length > 0 && (
+                    <section>
+                      <h4 className="mb-2 text-sm font-semibold text-zinc-900">
+                        Other jobs
+                      </h4>
+                      <div className="flex flex-col gap-3 rounded-md border border-zinc-200 bg-white p-3 text-xs shadow-sm">
+                        {otherJobGroups.map((group) => (
+                          <div key={group.parentStepId}>
+                            <h5 className="font-medium text-zinc-500">
+                              In {group.parentStepName}
+                            </h5>
+                            <ul className="mt-1 flex flex-col gap-1">
+                              {group.otherJobs.map((job) => {
+                                const { Icon, iconClass, phrase } =
+                                  OTHER_JOB_STATUS_STYLE[job.status];
+                                const showDuration =
+                                  (job.status === "complete" ||
+                                    job.status === "failed") &&
+                                  job.duration &&
+                                  job.duration !== "--";
+                                return (
+                                  <li
+                                    key={job.id}
+                                    className="flex items-center gap-1.5"
+                                  >
+                                    <Icon
+                                      size={12}
+                                      aria-hidden="true"
+                                      className={cn(
+                                        "flex-shrink-0",
+                                        iconClass,
+                                      )}
+                                    />
+                                    <span className="text-zinc-800">
+                                      {job.name}
+                                    </span>
+                                    <span className="text-zinc-500">
+                                      {phrase}
+                                      {showDuration && ` · ${job.duration}`}
+                                    </span>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
                   )}
                 </div>
 

@@ -138,24 +138,25 @@ export const mockBuildSteps: BuildStep[] = [
         exitCode: null,
       },
       // --- Multi-failure demo toggle -------------------------------------
-      // Re-comment the job below to return to the single-failure heading.
-      {
-        id: "test-node22",
-        name: "Test (Node 22)",
-        status: "failed",
-        command: "npm test",
-        agent: "ubuntu-latest",
-        queue: "default",
-        duration: "45s",
-        startTime: "10:46:19",
-        state: "normal",
-        exitCode: 1,
-        errorMessage:
-          "TypeError: Cannot read properties of undefined (reading 'expiresAt')",
-        testFile: "src/auth/token.ts",
-        line: 88,
-        logUrl: "#log-test-node22",
-      },
+      // Uncomment the job below to preview the multi-failure heading:
+      //   "2 steps failed: Test (Node 18), Test (Node 22)."
+      // {
+      //   id: "test-node22",
+      //   name: "Test (Node 22)",
+      //   status: "failed",
+      //   command: "npm test",
+      //   agent: "ubuntu-latest",
+      //   queue: "default",
+      //   duration: "45s",
+      //   startTime: "10:46:19",
+      //   state: "normal",
+      //   exitCode: 1,
+      //   errorMessage:
+      //     "TypeError: Cannot read properties of undefined (reading 'expiresAt')",
+      //   testFile: "src/auth/token.ts",
+      //   line: 88,
+      //   logUrl: "#log-test-node22",
+      // },
       // -------------------------------------------------------------------
     ],
   },

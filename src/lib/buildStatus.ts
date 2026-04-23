@@ -1,4 +1,4 @@
-import type { BuildStatus, BuildStep, StepStatus } from "@/types/build";
+import type { BuildStatus, BuildStep, Job, StepStatus } from "@/types/build";
 
 /** Human-readable label for a step status. */
 export const getStatusLabel = (s: StepStatus) => {
@@ -136,6 +136,29 @@ export const collectFailures = (steps: BuildStep[]): BuildFailure[] => {
     }
   }
   return failures;
+};
+
+export interface OtherJobsGroup {
+  parentStepId: string;
+  parentStepName: string;
+  otherJobs: Job[];
+}
+
+export const getOtherJobsByStep = (steps: BuildStep[]): OtherJobsGroup[] => {
+  const groups: OtherJobsGroup[] = [];
+  for (const step of steps) {
+    if (!step.jobs?.length) continue;
+    const hasFailure = step.jobs.some((j) => j.status === "failed");
+    if (!hasFailure) continue;
+    const otherJobs = step.jobs.filter((j) => j.status !== "failed");
+    if (otherJobs.length === 0) continue;
+    groups.push({
+      parentStepId: step.id,
+      parentStepName: step.name,
+      otherJobs,
+    });
+  }
+  return groups;
 };
 
 export const buildShortFailureSummary = (
