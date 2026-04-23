@@ -17,8 +17,14 @@ function App() {
         }}
         buildSteps={mockBuildSteps}
         status="failed"
+        onRetryFailedJobs={() => console.log("retry failed jobs")}
+        onRestartBuild={() => console.log("rebuild")}
+        onCancelBuild={() => console.log("cancel build")}
+        onRetryJob={(f) => console.log("retry job", f.label)}
       />
-      <PageSkeleton />
+      <section id="pipeline-steps" tabIndex={-1}>
+        <PageSkeleton />
+      </section>
     </div>
   );
 }

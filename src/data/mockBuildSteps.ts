@@ -119,6 +119,11 @@ export const mockBuildSteps: BuildStep[] = [
         startTime: "10:46:19",
         state: "normal",
         exitCode: 1,
+        errorMessage:
+          "AssertionError: expected token.expiresAt to be a Date, got null",
+        testFile: "src/auth/token.test.ts",
+        line: 42,
+        logUrl: "#log-test-node18",
       },
       {
         id: "test-node20",
@@ -132,6 +137,26 @@ export const mockBuildSteps: BuildStep[] = [
         state: "pending",
         exitCode: null,
       },
+      // --- Multi-failure demo toggle -------------------------------------
+      // Re-comment the job below to return to the single-failure heading.
+      {
+        id: "test-node22",
+        name: "Test (Node 22)",
+        status: "failed",
+        command: "npm test",
+        agent: "ubuntu-latest",
+        queue: "default",
+        duration: "45s",
+        startTime: "10:46:19",
+        state: "normal",
+        exitCode: 1,
+        errorMessage:
+          "TypeError: Cannot read properties of undefined (reading 'expiresAt')",
+        testFile: "src/auth/token.ts",
+        line: 88,
+        logUrl: "#log-test-node22",
+      },
+      // -------------------------------------------------------------------
     ],
   },
   {

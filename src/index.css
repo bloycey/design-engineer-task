@@ -19,4 +19,12 @@
 
 .animate-barber {
   animation: barber 2s linear infinite;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    theme("colors.amber.400") 0px,
+    theme("colors.amber.400") 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  background-size: 200% 200%;
 }
