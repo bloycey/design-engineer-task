@@ -22,15 +22,19 @@ I've made the timeline component more obvious and explicit. Previously it was ju
 
 I decided to prioritise the information about FAILURES only, while keeping other information minimal. Failing steps require action and attention while usually if something passes everyone is happy to move on.
 
+I also included a brief overview of the status of non-failing jobs. This is useful for if a job passes on a particular node version but not on another (like in the mock example).
+
 I added a human readable error message to the mock data, along with a line number. This seemed to be the main thing missing from the mock data that might help a dev when debugging.
 
 I also included:
 
-- `Jump to job` link (scrolls down to the detailed section below)
-- `retry job` button (currently just a placeholder)
+-   `Jump to job` link (scrolls down to the detailed section below)
+-   `retry job` button (currently just a placeholder)
 
 ## Misc design decisions
 
-- Removed the blue hover effect (confusing to me, why have it)
-- Made an explicit "Show details / hide details" button rather than having the whole panel clickable. This is better for semantic HTML and accessibility. It also allows the error to be more easily copied without triggering the onClick open/close of the panel.
-- Did a general accessibility audit. Replaced some divs with landmark HTML (`section`, etc), added some aria tags, put aria-hidden on icons. There's probably more to do here with more time.
+-   Replaced the prominent heading text that read "Failed in 2m 22s" with text that says "Test (Node 18) failed" (or "2 tests failed") etc. It's more important to know WHAT failed rather than HOW LONG something took to fail.
+-   Removed the blue hover effect (confusing to me, why have it)
+-   Made an explicit "Show details / hide details" button rather than having the whole panel clickable. This is better for semantic HTML and accessibility. It also allows the error to be more easily copied without triggering the onClick open/close of the panel.
+-   Did a general accessibility audit. Replaced some divs with landmark HTML (`section`, etc), added some aria tags, put aria-hidden on icons. There's probably more to do here with more time.
+-   Added a copy to clipboard button on the error.
