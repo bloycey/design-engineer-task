@@ -1,4 +1,4 @@
-import type { BuildStep, StepStatus } from "@/types/build";
+import type { BuildStatus, BuildStep, StepStatus } from "@/types/build";
 
 /** Human-readable label for a step status. */
 export const getStatusLabel = (s: StepStatus) => {
@@ -17,7 +17,7 @@ export const getStatusLabel = (s: StepStatus) => {
 };
 
 /** Tailwind color tokens keyed by build/step status string. */
-export const getStatusColors = (s: string) => {
+export const getStatusColors = (s: BuildStatus | StepStatus) => {
   switch (s) {
     case "running":
     case "in-progress":

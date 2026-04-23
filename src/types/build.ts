@@ -1,6 +1,13 @@
 export type JobState = "normal" | "pending" | "scheduled" | "retried";
 export type StepStatus = "complete" | "in-progress" | "failed" | "pending";
 export type StepType = "command" | "parallel" | "matrix" | "group";
+export type BuildStatus =
+  | "pending"
+  | "running"
+  | "passed"
+  | "failed"
+  | "canceled"
+  | "complete";
 
 export interface Job {
   id: string;
